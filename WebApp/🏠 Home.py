@@ -1,34 +1,46 @@
 import streamlit as st
-import Model
+from pathlib import Path
 
-st.text("Data")
-Dataset_URL = "E:\Projects\CPP_Model\Data\CarsData.csv"
-Dataset = Model.get_dataset(Dataset_URL)
+path = Path.cwd()
 
-st.text("Process")
-Dataset = Model.fix_problems(Dataset)
+col1, col2, col3 = st.columns(3)
+with col2:
+    st.image(str(path.joinpath("Logo.png")), use_column_width=True)
 
-X_cat = Model.form_XCAT(Dataset)
-X_num = Model.form_XNUM(Dataset)
-y = Model.form_y(Dataset)
+st.title("CPP")
+st.header("An ML model that predicts car prices...")
 
-Encoder = Model.fit_Encoder(X_cat)
+st.container(height=10, border=False)
 
-X_cat = Model.encode_XCAT(Encoder, X_cat)
+st.link_button(label="Click here to start model training process !",
+               url="http://localhost:8501/Modeling",
+               type="primary",
+               use_container_width=True)
 
-X = Model.form_X(X_cat, X_num)
+st.divider()
 
-X_train, X_test, y_train, y_test = Model.split_X_to_train_test(X, y)
+st.subheader("What can i do with the model responses?")
+st.write("""
+        if you want to buy a car or sell your car, you can use our model to estimate your
+        car value and then can make a more informed decision.
+        """)
 
-Scaler = Model.fit_Scaler(X_train)
+st.container(height=5, border=False)
 
-X_train = Model.scale_XTRAIN(Scaler, X_train)
+st.subheader("Main features of the model:")
+st.write("""
+        🔹 95% accuracy and higher...\n
+        🔹 Predicting car prices from Audi, Ford, Toyota, BMW, Mercedes Benz, and ...\n
+        🔹 More than 97,000 sample...\n
+        🔹 Predicting based on the most importan features like model, year, enginesize,
+           fueltype, and ...\n
+        🔹 Using an non-deep ML algorithm and quick training time... (relative to Neural
+           Network algorithms)\n
+        🔹 Simple GUI and good UX while working with the model...\n
+        🔹 And so on...\n
+        """)
 
-st.text("Model")
-CPP_Model = Model.fit_Model(X_train, y_train)
+st.container(height=5, border=False)
 
-y_pred = Model.predict_XTEST(CPP_Model, Scaler, X_test)
-
-score = Model.evaluate_model(y_test, y_pred)
-
-st.write(score)
+st.subheader('Surprised and excited? Lets go further!')
+st.write('Click on the "👋Introduction" in the sidebar...')

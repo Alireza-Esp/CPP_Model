@@ -7,9 +7,13 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import r2_score
 
 
+# Hashes the objects for giving to arguments of functions
+
 def hash_func(obj: object):
     return
 
+
+# Downloads the dataset from a given URL
 
 @st.cache_data
 def get_dataset(URL: str) -> pd.DataFrame:
@@ -18,6 +22,8 @@ def get_dataset(URL: str) -> pd.DataFrame:
 
     return dataset
 
+
+# Fixes some bugs in the dataset (specific to dataset CarsDateset)
 
 @st.cache_data
 def fix_problems(Dataset: pd.DataFrame) -> pd.DataFrame:
@@ -45,6 +51,8 @@ def fix_problems(Dataset: pd.DataFrame) -> pd.DataFrame:
     return Dataset
 
 
+# The Dataset has categorical and numerical features. forms the categorical X
+
 @st.cache_data
 def form_XCAT(Dataset: pd.DataFrame) -> pd.DataFrame:
 
@@ -54,6 +62,8 @@ def form_XCAT(Dataset: pd.DataFrame) -> pd.DataFrame:
     return X_cat
 
 
+# Forms the numerical X
+
 @st.cache_data
 def form_XNUM(Dataset: pd.DataFrame) -> pd.DataFrame:
 
@@ -62,6 +72,8 @@ def form_XNUM(Dataset: pd.DataFrame) -> pd.DataFrame:
     return X_num
 
 
+# Forms the y
+
 @st.cache_data
 def form_y(Dataset: pd.DataFrame) -> np.ndarray:
 
@@ -69,6 +81,8 @@ def form_y(Dataset: pd.DataFrame) -> np.ndarray:
 
     return y
 
+
+# Fits encoder on XCAT and returns it
 
 @st.cache_resource
 def fit_Encoder(X_categorical: pd.DataFrame) -> OneHotEncoder:
@@ -80,6 +94,8 @@ def fit_Encoder(X_categorical: pd.DataFrame) -> OneHotEncoder:
     return Encoder
 
 
+# Encodes the XCAT by encoder and returns it
+
 @st.cache_data
 def encode_XCAT(_Encoder: OneHotEncoder, X_categorical: pd.DataFrame) -> pd.DataFrame:
 
@@ -87,6 +103,8 @@ def encode_XCAT(_Encoder: OneHotEncoder, X_categorical: pd.DataFrame) -> pd.Data
 
     return X_categorical
 
+
+# Froms the X vector using encoded XCAT and XNUM
 
 @st.cache_data
 def form_X(X_categorical: pd.DataFrame, X_numerical: pd.DataFrame) -> np.ndarray:
@@ -96,8 +114,10 @@ def form_X(X_categorical: pd.DataFrame, X_numerical: pd.DataFrame) -> np.ndarray
     return X
 
 
+# splits the X and y to train and test sets
+
 @st.cache_data
-def split_X_to_train_test(X: np.ndarray, y: np.ndarray) -> list:
+def split_X_y_to_train_test(X: np.ndarray, y: np.ndarray) -> list:
 
     X_train, X_test, y_train, y_test = train_test_split(X,
                                                         y,
@@ -106,6 +126,8 @@ def split_X_to_train_test(X: np.ndarray, y: np.ndarray) -> list:
 
     return [X_train, X_test, y_train, y_test]
 
+
+# Fits scaler on XTRAIN and returns it
 
 @st.cache_resource
 def fit_Scaler(X_train: np.ndarray) -> StandardScaler:
@@ -117,6 +139,8 @@ def fit_Scaler(X_train: np.ndarray) -> StandardScaler:
     return Scaler
 
 
+# Scales the XTRAIN by scaler
+
 @st.cache_data
 def scale_XTRAIN(_Scaler: StandardScaler, X_train: np.ndarray) -> np.ndarray:
 
@@ -124,6 +148,8 @@ def scale_XTRAIN(_Scaler: StandardScaler, X_train: np.ndarray) -> np.ndarray:
 
     return X_train
 
+
+# Fits model on XTRAIN and YTRAIN and returns it
 
 @st.cache_resource
 def fit_Model(X_train: np.ndarray, y_train: np.ndarray) -> RandomForestRegressor:
@@ -135,6 +161,8 @@ def fit_Model(X_train: np.ndarray, y_train: np.ndarray) -> RandomForestRegressor
     return Model
 
 
+# Predicts the XTEST via trained model
+
 @st.cache_data
 def predict_XTEST(_Model: RandomForestRegressor, _Scaler: StandardScaler, X_test: np.ndarray) -> np.ndarray:
 
@@ -142,6 +170,8 @@ def predict_XTEST(_Model: RandomForestRegressor, _Scaler: StandardScaler, X_test
 
     return y_pred
 
+
+# Evaluates the model based on r2_score
 
 @st.cache_data
 def evaluate_model(y_test: np.ndarray, y_pred: np.ndarray):
